@@ -1,4 +1,4 @@
-best <- function(state, outcome) {
+rankhospital <- function(state, outcome, num = "best") {
     data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
     
     if(!is.element(state, data$State))
@@ -15,7 +15,10 @@ best <- function(state, outcome) {
     
     state.data <- rel.data[rel.data$state == state,]
     outcome <- gsub(" ", ".", outcome)
-    low <- min(state.data[[outcome]], na.rm = TRUE)
-    rows <- na.omit(state.data[state.data[[outcome]] == low,])
-    as.character(rows$hospital)
+    ordered <- state.data[with(state.data, order(state.data[[outcome]], hospital, na.last=NA)),]
+
+    if(num == "best") num = 1
+    if(num == "worst") num = nrow(ordered)
+    
+    as.character(ordered[num,]$hospital)
 }

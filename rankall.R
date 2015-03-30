@@ -1,8 +1,5 @@
-best <- function(state, outcome) {
+rankall <- function(outcome, num = "best") {
     data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-    
-    if(!is.element(state, data$State))
-        stop("invalid state")
     
     if(!is.element(outcome, c("heart attack", "heart failure", "pneumonia")))
         stop("invalid outcome")
@@ -13,9 +10,14 @@ best <- function(state, outcome) {
                            "heart.failure" = suppressWarnings(as.numeric(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)), 
                            "pneumonia" = suppressWarnings(as.numeric(data$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)))
     
-    state.data <- rel.data[rel.data$state == state,]
     outcome <- gsub(" ", ".", outcome)
-    low <- min(state.data[[outcome]], na.rm = TRUE)
-    rows <- na.omit(state.data[state.data[[outcome]] == low,])
-    as.character(rows$hospital)
+    ordered <- rel.data[with(rel.data, order(state, rel.data[[outcome]], hospital, na.last=NA)),]
+    states <- levels(rel.data$state)
+    vals <- sapply(states, function(s) {
+        obs <- ordered[ordered$state == s,]
+        if(num == "best") num = 1
+        if(num == "worst") num = nrow(obs)
+        obs$hospital[num]
+    })
+    data.frame(state = states, hospital = vals)
 }
