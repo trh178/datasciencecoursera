@@ -1,0 +1,12 @@
+library(nlme)
+library(lattice)
+xyplot(weight ~ Time | Diet, BodyWeight)
+
+library(datasets)
+data(airquality)
+library(ggplot2)
+airquality = transform(airquality, Month = factor(Month))
+qplot(Wind, Ozone, data = airquality, facets = . ~ Month)
+qplot(votes, rating, data = movies) + geom_smooth()
+g <- ggplot(movies, aes(votes, rating))
+print(g)
