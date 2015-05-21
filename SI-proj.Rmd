@@ -1,0 +1,69 @@
+---
+title: "Exploring the Central Limit Theorem"
+subtitle: "Using the Exponential Distribution in R"
+author: "Todd Haldeman"
+date: "Thursday, May 21, 2015"
+output: pdf_document
+---
+
+## Overview
+
+This project will investigate the exponential distribution in R and compare it with the Central Limit Theorem (CLT). The mean and variance of of the samples will be compared to theoritical mean and variance. Finally, the distribution will be show to be approximately normal.
+
+## Setup
+
+This investigation uses a fixed rate of 0.2 for the rate parameter of the R Exponential Distribution. By definition, the mean and standard deviation of the distribution are the inverse of this rate.
+
+```{r}
+lambda <- 0.2
+mean.theoretical <- 1/lambda
+sd.theoretical <- 1/lambda
+```
+
+## Simulations
+
+In order to investigate the effects of the CLT, first we need a few simulations of random exponentials in R. We will generate two:
+
+- 1000 random exponentials
+- 1000 means of 40 random exponentials
+
+### 1000 random exponentials
+
+First, we take 1000 random samples from the exponential distribution, and save it to v1:
+
+```{r}
+v1 <- rexp(1000, lambda)
+hist(v1)
+```
+
+### 1000 means of 40 random exponentials
+
+Next, we take 40 random samples from the exponential distribution, with the same paramaters as above, and take the mean.  We do this 1000 times and store the means in v2:
+
+
+```{r}
+v2 <- NULL
+for(i in 1:1000) v2 <- c(v2, mean(rexp(40,lambda)))
+hist(v2)
+```
+
+## Sample Mean vs. Theoretical Mean
+
+By definition, the theoritical mean of our distribution is 1/lambda (stored above):
+```{r}
+mean.theoretical
+```
+
+Below we see the graph of our data, the sample mean (in red), and the theoritical mean (in blue):
+```{r}
+mean.sample <- mean(v2)
+mean.sample
+```
+
+## Sample Variance vs. Theoretical Variance
+
+## Distribution
+
+
+
+
